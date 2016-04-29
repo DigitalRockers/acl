@@ -73,6 +73,40 @@ describe('Memory', function () {
   run()
 })
 
+describe('MongoDB - useSingle / MongoDB - useSingle', function () {
+  before(function (done) {
+    var self = this
+      , mongodb = require('mongodb')
+
+    mongodb.connect('mongodb://localhost:27017/acltest',function(error, db) {
+      db.dropDatabase(function () {
+        self.backend = new Acl.mongodbBackend(db, "acl", true)
+        self.userBackend = new Acl.mongodbBackend(db, "aclUser", true)
+        done()
+      })
+    })
+  })
+
+  run()
+});
+
+describe('Memory / MongoDB - useSingle', function () {
+  before(function (done) {
+    var self = this
+      , mongodb = require('mongodb')
+
+    mongodb.connect('mongodb://localhost:27017/acltest',function(error, db) {
+      db.dropDatabase(function () {
+        self.backend = new Acl.memoryBackend()
+        self.userBackend = new Acl.mongodbBackend(db, "aclUser", true)
+        done()
+      })
+    })
+  })
+
+  run()
+});
+
 function run() {
   Object.keys(tests).forEach(function (test) {
     tests[test]()
